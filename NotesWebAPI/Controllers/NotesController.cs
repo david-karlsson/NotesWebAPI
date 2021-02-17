@@ -24,6 +24,16 @@ namespace NotesWebAPI.Controllers
             _noteServices = noteServices;
         }
 
+
+        [HttpGet]
+
+        public IActionResult GetNotes()
+        {
+
+            return Ok(_noteServices.GetNotes());
+        }
+
+
         [HttpGet("{id}", Name = "GetNote")]
         public IActionResult GetNote(int id)
         {
@@ -35,7 +45,27 @@ namespace NotesWebAPI.Controllers
         [HttpPost]
         public IActionResult  CreateNote(Note note)
         {
-            return Ok(_noteServices.CreateNote(note));
+            var newNote = _noteServices.CreateNote(note);
+            return CreatedAtRoute("GetNote", new {newNote.Id},newNote);
         }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteNote(int id)
+        {
+            _noteServices.DeleteNote(id);
+            return Ok();
+        }
+
+
+        [HttpPut]
+        public IActionResult EditNote([FromBody] Note note)
+        {
+
+            _noteServices.EditNote(note);
+            return Ok();
+
+        }
+
     }
 }
