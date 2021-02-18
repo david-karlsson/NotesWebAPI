@@ -30,6 +30,16 @@ namespace NotesWebAPI
             services.AddControllers();
             services.AddDbContext<AppDbContext>();
             services.AddTransient<INoteServices, NoteServices>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("NotesPolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("*")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
 
 
@@ -46,6 +56,8 @@ namespace NotesWebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("NotesPolicy");
 
             app.UseAuthorization();
 
